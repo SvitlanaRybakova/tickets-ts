@@ -1,0 +1,20 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+# says not try to push to Docker hub every time we build an image (default behavior)
+  local:
+    push: false
+  artifacts:
+    - image: sviry/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+# tells skaffold how to handle any files that changed inside the project
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
