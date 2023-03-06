@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+   # step 1 (selector => tells to deployments how to find all pods thar it's going to create)
+  selector:
+    matchLabels:
+      app: auth
+  # step 2 (template => tells to deployments how to create each individual pod)
+  template:
+    metadata:
+      # should match selector=>matchLabels=>app
+      labels:
+        app: auth
+    # tells to pod how to behave
+    spec:
+      containers:
+        - name: auth  # name only for login purposes
+          image: sviry/auth  # name of docker image to use
+---
+# service config
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec: # tells to service how to behave
+  selector:
+    # tells to service how to find the set of pods. Should match with template=>metadata=>labels=>app
+    app: auth
+  # may not specify due to default value will be ClusterIP
+  type: ClusterIP
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
