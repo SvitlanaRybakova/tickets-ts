@@ -1,12 +1,26 @@
-import express from 'express'
-import {json} from 'body-parser'
+import express from 'express';
+import { json } from 'body-parser';
 
-const PORT = 3000
+import { currentuserRouter } from './routes/current-user';
+import { signinRouter } from './routes/signin';
+import { signoutRouter } from './routes/signout';
+import { signupRouter } from './routes/signup';
+import { errorHandler } from './middlewares/error-handler';
 
-const app = express()
-app.use(json())
+const PORT = 3000;
+
+const app = express();
+app.use(json());
+
+app.use(currentuserRouter);
+app.use(signinRouter);
+app.use(signoutRouter);
+app.use(signupRouter);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`Listening on ${PORT}`);
-  
-})
+  console.log(`Listening on ${PORT} !!!!`);
+});
+
+
