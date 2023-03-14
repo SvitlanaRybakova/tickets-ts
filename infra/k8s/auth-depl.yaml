@@ -3,8 +3,9 @@ kind: Deployment
 metadata:
   name: auth-depl
 spec:
-  replicas: 1
-   # step 1 (selector => tells to deployments how to find all pods thar it's going to create)
+  replicas:
+    1
+    # step 1 (selector => tells to deployments how to find all pods thar it's going to create)
   selector:
     matchLabels:
       app: auth
@@ -17,8 +18,17 @@ spec:
     # tells to pod how to behave
     spec:
       containers:
-        - name: auth  # name only for login purposes
-          image: sviry/auth  # name of docker image to use
+        - name: auth # name only for login purposes
+          image: sviry/auth # name of docker image to use
+          # access to environment variable inside the cluster
+          # (k create secret generic jwt-secret --from-literal=JWT_KEY=secret)
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+
 ---
 # service config
 apiVersion: v1
