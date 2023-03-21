@@ -5,7 +5,7 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-# says not try to push to Docker hub every time we build an image (default behavior)
+  # says not try to push to Docker hub every time we build an image (default behavior)
   local:
     push: false
   artifacts:
@@ -13,8 +13,17 @@ build:
       context: auth
       docker:
         dockerfile: Dockerfile
-# tells skaffold how to handle any files that changed inside the project
+      # tells skaffold how to handle any files that changed inside the project
       sync:
         manual:
           - src: 'src/**/*.ts'
+            dest: .
+    - image: sviry/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      # tells skaffold how to handle any files that changed inside the project
+      sync:
+        manual:
+          - src: '**/*.js'
             dest: .

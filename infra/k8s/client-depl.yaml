@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas:
+    1
+    # step 1 (selector => tells to deployments how to find all pods thar it's going to create)
+  selector:
+    matchLabels:
+      app: client
+  # step 2 (template => tells to deployments how to create each individual pod)
+  template:
+    metadata:
+      # should match selector=>matchLabels=>app
+      labels:
+        app: client
+    # tells to pod how to behave
+    spec:
+      containers:
+        - name: client # name only for login purposes
+          image: sviry/client # name of docker image to use
+---
+# service config
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv
+spec: # tells to service how to behave
+  selector:
+    # tells to service how to find the set of pods. Should match with template=>metadata=>labels=>app
+    app: client
+  # may not specify due to default value will be ClusterIP
+  type: ClusterIP
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
