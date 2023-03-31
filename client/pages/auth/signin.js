@@ -1,13 +1,12 @@
-import React from 'react';
 import AuthForm from '../../components/authForm';
 import Layout from '../../components/layout';
 
-const signup = () => {
+const signin = () => {
   return (
     <Layout>
-      <AuthForm title={'Sign Up'} url={'/api/users/signup'} />
+      <AuthForm title={'Sign In'} url={'/api/users/signin'} />
     </Layout>
   );
 };
 
-export default signup;
+export default signin;

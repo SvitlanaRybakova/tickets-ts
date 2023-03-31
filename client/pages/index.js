@@ -2,7 +2,12 @@ import React from 'react';
 import BuildClient from '../api/build-client';
 
 const LandingPage = ({ currentUser }) => {
-  return <div>home page</div>;
+
+  return currentUser ? (
+    <div> You are sign in</div>
+  ) : (
+    <div>You are sign out</div>
+  );
 };
 
 LandingPage.getInitialProps = async (context) => {
