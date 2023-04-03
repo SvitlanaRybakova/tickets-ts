@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import { currentUser } from '@sviry/common';
 
-import { currentUser } from '../middlewares/current-user';
 // import { requireAuth } from '../middlewares/require-auth';
 
 const router = express.Router();
@@ -11,7 +10,6 @@ router.get(
   currentUser,
   // requireAuth,
   (req: Request, res: Response) => {
-
     res.send({ currentUser: req.currentUser || null });
     // if (!req.session?.jwt) {
     //   return res.send({ currentUser: null });
@@ -23,8 +21,6 @@ router.get(
     // } catch (err) {
     //   return res.send({ currentUser: null });
     // }
-
-    
   }
 );
 
