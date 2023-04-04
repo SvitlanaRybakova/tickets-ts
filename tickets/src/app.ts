@@ -2,8 +2,9 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import CookieSession from 'cookie-session';
-import { errorHandler, NotFoundError } from '@sviry/common';
+import { errorHandler, NotFoundError, currentUser } from '@sviry/common';
 
+import { createTicketRouter } from './routes/new';
 
 const PORT = 3000;
 
@@ -19,6 +20,8 @@ app.use(
   })
 );
 
+app.use(currentUser)
+app.use(createTicketRouter);
 
 app.all('*', async () => {
   throw new NotFoundError();
