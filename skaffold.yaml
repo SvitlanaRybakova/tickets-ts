@@ -27,3 +27,12 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
+    - image: sviry/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      # tells skaffold how to handle any files that changed inside the project
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

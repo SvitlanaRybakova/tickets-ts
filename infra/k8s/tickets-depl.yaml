@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-depl
+spec:
+  replicas:
+    1
+    # step 1 (selector => tells to deployments how to find all pods thar it's going to create)
+  selector:
+    matchLabels:
+      app: tickets
+  # step 2 (template => tells to deployments how to create each individual pod)
+  template:
+    metadata:
+      # should match selector=>matchLabels=>app
+      labels:
+        app: tickets
+    # tells to pod how to behave
+    spec:
+      containers:
+        - name: tickets # name only for login purposes
+          image: sviry/tickets # name of docker image to use
+          # access to environment variable inside the cluster
+          # (k create secret generic jwt-secret --from-literal=JWT_KEY=secret)
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+
+---
+# service config
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-srv
+spec: # tells to service how to behave
+  selector:
+    # tells to service how to find the set of pods. Should match with template=>metadata=>labels=>app
+    app: tickets
+  # may not specify due to default value will be ClusterIP
+  type: ClusterIP
+  ports:
+    - name: tickets
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
