@@ -16,6 +16,7 @@ const start = async () => {
     console.error('Cannot connect to the db', err);
   }
 };
+
 app.listen(PORT, () => {
   console.log(`Listening on ${PORT} !!!!`);
 });
