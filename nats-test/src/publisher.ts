@@ -1,0 +1,26 @@
+import nats from 'node-nats-streaming';
+import { TicketCreatedPublisher } from './events/ticket-created-publisher';
+
+console.clear();
+
+//create a client
+const stan = nats.connect('tickets', 'abc', {
+  url: 'http://localhost:4222',
+});
+
+//execites after the publisher connecting to NATS
+stan.on('connect', async () => {
+  console.log('Publisher connected to NATS');
+
+  const publisher = new TicketCreatedPublisher(stan);
+
+  try {
+    await publisher.publish({
+      id: '123',
+      title: 'concert',
+      price: 20,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+});
