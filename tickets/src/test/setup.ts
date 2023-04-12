@@ -1,8 +1,5 @@
-import { response } from 'express';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import request from 'supertest';
-import { app } from '../app';
 import jwt from 'jsonwebtoken';
 
 declare global {
@@ -12,6 +9,8 @@ declare global {
     }
   }
 }
+
+jest.mock('../nats-wrapper');
 
 let mongo: any;
 // create, get and connect a memory server before running each test
