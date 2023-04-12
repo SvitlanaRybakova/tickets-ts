@@ -2,6 +2,8 @@ import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
 
+import { natsWrapper } from '../../nats-wrapper';
+
 // jest.mock('../../nats-wrapper');
 
 it('returns a 404 if the provided id does not exist', async () => {
@@ -50,7 +52,7 @@ it('returns a 401 if the user does not own the ticket', async () => {
     })
     .expect(401);
 
-  // check the original ticket is unchanged 
+  // check the original ticket is unchanged
   const originalTicketResponse = await request(app)
     .get(`/api/tickets/${ticketId}`)
     .send();
@@ -125,4 +127,32 @@ it('updates the ticket provided valid inputs', async () => {
 
   expect(updatedTicketResponse.body.title).toEqual('a new title');
   expect(updatedTicketResponse.body.price).toEqual(100000);
+});
+
+
+it('publishes an event after updating the ticket', async () => {
+  const cookie = global.signin();
+
+  //create a ticket
+  const response = await request(app)
+    .post(`/api/tickets`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'title 1',
+      price: 20,
+    });
+
+  const ticketId = response.body.id;
+
+  // update ticket
+  await request(app)
+    .put(`/api/tickets/${ticketId}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'a new title',
+      price: 100000,
+    })
+    .expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
