@@ -23,6 +23,14 @@ spec:
           # access to environment variable inside the cluster
           # (k create secret generic jwt-secret --from-literal=JWT_KEY=secret)
           env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: tickets
             - name: MONGO_URI
               value: 'mongodb://tickets-mongo-srv:27017/tickets' # the service name (tickets-mongo-srv) from tickets-mongo-depl.yaml, /tickets -random db name inside service
             - name: JWT_KEY
