@@ -36,3 +36,12 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: sviry/orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      # tells skaffold how to handle any files that changed inside the project
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
