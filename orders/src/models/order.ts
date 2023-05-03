@@ -1,18 +1,19 @@
 import mongoose from 'mongoose';
 import { OrderStatus } from '@sviry/common';
+import { ITicketDoc } from './ticket';
 
 interface IOrderAttrs {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
-  ticket: TicketDoc;
+  ticket: ITicketDoc;
 }
 
 interface IOrderDoc extends mongoose.Document {
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
-  ticket: TicketDoc;
+  ticket: ITicketDoc;
 }
 
 interface IOrderModel extends mongoose.Model<IOrderDoc> {
