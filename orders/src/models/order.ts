@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import { OrderStatus } from '@sviry/common';
 import { ITicketDoc } from './ticket';
 
+export { OrderStatus };
+
 interface IOrderAttrs {
   userId: string;
   status: OrderStatus;

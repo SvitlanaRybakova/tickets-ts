@@ -1,19 +1,19 @@
 import mongoose from 'mongoose';
 import express, { Request, Response } from 'express';
 import {
-  BadRequestError,
-  NotFoundError,
-  OrderStatus,
   requireAuth,
   validateRequest,
+  NotFoundError,
+  OrderStatus,
+  BadRequestError,
 } from '@sviry/common';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
 import { Order } from '../models/order';
 
-const EXPIRATION_WINDOW_SECONDS = 15 * 60; // 15 minutes
-
 const router = express.Router();
+
+const EXPIRATION_WINDOW_SECONDS = 15 * 60;
 
 router.post(
   '/api/orders',
@@ -29,19 +29,16 @@ router.post(
   async (req: Request, res: Response) => {
     const { ticketId } = req.body;
 
-    // Find the ticket the user is trying to order on the database
+    // Find the ticket the user is trying to order in the database
     const ticket = await Ticket.findById(ticketId);
-
     if (!ticket) {
       throw new NotFoundError();
     }
 
-    // Make sure thst this ticket is nit already reserved
-
+    // Make sure that this ticket is not already reserved
     const isReserved = await ticket.isReserved();
-
     if (isReserved) {
-      throw new BadRequestError('Ticket is already reserved ');
+      throw new BadRequestError('Ticket is already reserved');
     }
 
     // Calculate an expiration date for this order
@@ -53,9 +50,8 @@ router.post(
       userId: req.currentUser!.id,
       status: OrderStatus.Created,
       expiresAt: expiration,
-      ticket: ticket,
+      ticket,
     });
-
     await order.save();
 
     // Publish an event saying that an order was created

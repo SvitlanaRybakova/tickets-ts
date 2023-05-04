@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-import { Order } from './order';
-import { OrderStatus } from '@sviry/common';
+import { Order, OrderStatus } from './order';
 
 interface ITicketAttrs {
   title: string;
