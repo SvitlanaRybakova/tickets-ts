@@ -18,7 +18,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cygnetops/common-v2": "1.0.2",
     "@sviry/common": "^1.0.3",
     "@types/cookie-session": "^2.0.44",
     "@types/express-serve-static-core": "^4.17.33",
